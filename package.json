@@ -2,7 +2,7 @@
   "name": "rajatm-cpsc8750",
   "version": "1.0.0",
   "description": "Personal website on fyi.io",
-  "main": "views/index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
