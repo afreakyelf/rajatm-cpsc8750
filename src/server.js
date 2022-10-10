@@ -19,10 +19,9 @@ app.use(cookieParser());
 
 // Function to calculate for how long you have been here
 function myFunction(last_accessed) {
-    var timeOnSite = new Date() - last_accessed;
-
+    var timeOnSite = Date.now() - last_accessed;
     var secondsTotal = timeOnSite / 1000;
-    var seconds = Math.floor(secondsTotal)  % 60;
+    var seconds = Math.floor(secondsTotal);
     return seconds;
 }
 
@@ -30,13 +29,15 @@ function myFunction(last_accessed) {
 
 app.get('/', (req, res) => {
 
-    // To check for first time
+    // Increament visitor id if it doesn't exist
     if (isNaN(req.cookies['visitorId'])){
       nextVisitorId++;
     }
-    res.cookie('visitorId', nextVisitorId);
-    res.cookie('visited', Date.now().toString());
 
+    // Update the visitor ID 
+    res.cookie('visitorId', nextVisitorId);
+
+    // To check for first time
     var vis =  "";
     if (isNaN(myFunction(req.cookies['visited']))){
         vis =  "You have never visited";
@@ -44,12 +45,17 @@ app.get('/', (req, res) => {
         vis = "It has been " + myFunction(req.cookies['visited']) + " seconds since your last visit";
     }
 
+    // Update the time user visited
+    res.cookie('visited', Date.now());
+
     res.render('welcome', {
         name: req.query.name || "All",
         last_accessed : new Date().toLocaleString() || "10/07/2022, 00:00:00 PM",
         visited:`${vis}`,
         visitorId: req.cookies['visitorId'] || nextVisitorId
       });
+
+    console.log(req.cookies)
   
   });
 
